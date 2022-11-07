@@ -7,18 +7,19 @@ class TruthBayesNet(BayesNet):
         self.links = links
         # emp_probs = empirical probabilities
         self.emp_probs = {}
+        self.set_emp_probs()
 
-    def set_link_to_emp_probs(self):
+    def set_emp_probs(self):
         link_nd_names = []
         for link in self.links:
-            for ampu_st_k in [0,1]:
-                if link[ampu_st_k] not in link_nd_names:
-                    link_nd_names.append(link[ampu_st_k])
+            for k in [0,1]:
+                if link[k] not in link_nd_names:
+                    link_nd_names.append(link[k])
         link_nds = [self.get_node_named(name) for\
                      name in link_nd_names]
         full_pot = link_nds[0].potential
-        for ampu_st_k in range(1, len(link_nds)):
-            full_pot = full_pot*(link_nds[ampu_st_k].potential)
+        for k in range(1, len(link_nds)):
+            full_pot = full_pot*(link_nds[k].potential)
         nd_name_to_probs = {}
         for nd in link_nds:
             pot_arr = full_pot.get_new_marginal([nd]).pot_arr
@@ -42,12 +43,12 @@ class TruthBayesNet(BayesNet):
                     ampu_size, not_ampu_size = size_b, size_a
                 for pa_nd in ampu_nd.parents:
                     ampu_nd.remove_parent(pa_nd)
-                for ampu_st_k, ampu_st_name in enumerate(ampu_nd.state_names):
+                for k in range(len(ampu_nd.state_names)):
                     ampu_nd.potential = Potential(
                         False,
                         [],
                         pot_arr=np.zeros((ampu_size,)))
-                    ampu_nd.potential[(ampu_st_k,)] = 1
+                    ampu_nd.potential.pot_arr[k] = 1
                     ord_nodes = list(ampu_bnet.nodes)
                     full_pot = ord_nodes[0].potential
                     for j in range(1, len(link_nds)):
@@ -55,11 +56,11 @@ class TruthBayesNet(BayesNet):
                     ampu_pot = full_pot.get_new_marginal(
                         [ampu_nd, not_ampu_nd])
                     if amputee == "a":
-                        prob_b_bar_do_a[ampu_st_k, :] = \
-                            ampu_pot.pot_arr[ampu_st_k, :]
+                        prob_b_bar_do_a[k, :] = \
+                            ampu_pot.pot_arr[k, :]
                     else:
-                        prob_a_bar_do_b[:, ampu_st_k] = \
-                            np.ampu_pot.pot_arr[:, ampu_st_k]
+                        prob_a_bar_do_b[k, :] = \
+                            np.ampu_pot.pot_arr[k, :]
             link_to_ampu_probs[(link[0], link[1])]= \
                 (prob_a_bar_do_b, prob_b_bar_do_a)
             self.emp_probs = [nd_name_to_probs, link_to_ampu_probs]
