@@ -49,8 +49,11 @@ class Case1(BlankCase):
         for nd in dag.nodes:
             nd_to_size[nd] = 2
         nd_to_size["a"] = 3
-        bnet = dag.create_random_bnet(nd_to_size)
-        return TruthBayesNet(self.links, bnet.nodes)
+        bnet = TruthBayesNet.create_random_bnet(
+            dag.nodes,
+            dag.arrows,
+            nd_to_size)
+        return TruthBayesNet(bnet)
 
 
 

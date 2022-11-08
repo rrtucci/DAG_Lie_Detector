@@ -18,12 +18,12 @@ class GCF_calculator:
         self.set_dag_to_gcf()
 
     def set_link_to_ab_hospi(self):
-        nd_to_probs, link_to_ampu_probs = self.emp_probs
+        nd_name_to_probs, link_to_ampu_probs = self.emp_probs
 
         for link in self.links:
             nd_a, nd_b = link[0], link[1]
             prob_a_bar_do_b, prob_b_bar_do_a = link_to_ampu_probs[link]
-            prob_a, prob_b = nd_to_probs[nd_a], nd_to_probs[nd_b]
+            prob_a, prob_b = nd_name_to_probs[nd_a], nd_name_to_probs[nd_b]
             size_a, size_b = prob_b_bar_do_a.shape
             hospi_a = 0
             hospi_b = 0
