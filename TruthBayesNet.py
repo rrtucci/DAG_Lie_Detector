@@ -9,7 +9,7 @@ class TruthBayesNet(BayesNet):
         self.links = []
         for pa_nd in bnet.nodes:
             for ch_nd in pa_nd.children:
-                self.links.append([pa_nd.name, ch_nd.name])
+                self.links.append((pa_nd.name, ch_nd.name))
 
         # emp_probs = empirical probabilities
         self.emp_probs = {}
@@ -30,22 +30,22 @@ class TruthBayesNet(BayesNet):
         # print("gfrt", nd_name_to_probs)
         link_to_ampu_probs = {}
         for link in self.links:
-            size_a = self.get_node_named(link[0]).size
-            size_b = self.get_node_named(link[1]).size
-            prob_a_bar_do_b = np.zeros((size_b, size_a))
-            prob_b_bar_do_a = np.zeros((size_a, size_b))
-            for amputee in ["a", "b"]:
+            size_0 = self.get_node_named(link[0]).size
+            size_1 = self.get_node_named(link[1]).size
+            prob_0_bar_do_1 = np.zeros((size_1, size_0))
+            prob_1_bar_do_0 = np.zeros((size_0, size_1))
+            for amputee in [0, 1]:
                 # print("cccA")
                 ampu_bnet = cp.deepcopy(self)
                 # print("ccccB", ampu_bnet)
-                nd_a = ampu_bnet.get_node_named(link[0])
-                nd_b = ampu_bnet.get_node_named(link[1])
-                if amputee == "a":
-                    ampu_nd, not_ampu_nd = nd_a, nd_b
-                    ampu_size, not_ampu_size = size_a, size_b
+                nd_0 = ampu_bnet.get_node_named(link[0])
+                nd_1 = ampu_bnet.get_node_named(link[1])
+                if amputee == 0:
+                    ampu_nd, not_ampu_nd = nd_0, nd_1
+                    ampu_size, not_ampu_size = size_0, size_1
                 else:
-                    ampu_nd, not_ampu_nd = nd_b, nd_a
-                    ampu_size, not_ampu_size = size_b, size_a
+                    ampu_nd, not_ampu_nd = nd_1, nd_0
+                    ampu_size, not_ampu_size = size_1, size_0
                 original_parents = list(ampu_nd.parents)
                 for pa_nd in original_parents:
                     ampu_nd.remove_parent(pa_nd)
@@ -65,15 +65,16 @@ class TruthBayesNet(BayesNet):
                     ampu_pot = full_pot.get_new_marginal(
                         [ampu_nd, not_ampu_nd])
                     # print("hhjki", ampu_pot)
-                    if amputee == "a":
-                        prob_b_bar_do_a[k, :] = \
+                    if amputee == 0:
+                        prob_1_bar_do_0[k, :] = \
                             ampu_pot.pot_arr[k, :]
                     else:
-                        prob_a_bar_do_b[k, :] = \
+                        prob_0_bar_do_1[k, :] = \
                             ampu_pot.pot_arr[k, :]
-            # list can't be used as key to dictionary
-            link_to_ampu_probs[repr(link)]= \
-                [prob_a_bar_do_b, prob_b_bar_do_a]
+            # list L can't be used as key to dictionary
+            # but tuple(L) or repr(L) can be
+            link_to_ampu_probs[link]= \
+                [prob_0_bar_do_1, prob_1_bar_do_0]
             self.emp_probs = [nd_name_to_probs, link_to_ampu_probs]
 
     @staticmethod
@@ -132,12 +133,12 @@ if __name__ == "__main__":
         print('node name to probabilities:')
         pprint(nd_name_to_probs)
         for link in truth_bnet.links:
-            prob_a_bar_do_b, prob_b_bar_do_a = \
-                link_to_ampu_probs[repr(link)]
+            prob_0_bar_do_1, prob_1_bar_do_0 = \
+                link_to_ampu_probs[link]
             print("\nlink=", link)
-            print("prob_a_bar_do_b:")
-            pprint(prob_a_bar_do_b)
-            print("prob_b_bar_do_a:")
-            pprint(prob_b_bar_do_a)
+            print("prob_0_bar_do_1:")
+            pprint(prob_0_bar_do_1)
+            print("prob_1_bar_do_0:")
+            pprint(prob_1_bar_do_0)
 
     main(draw=False, verbose=False)

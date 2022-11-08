@@ -38,6 +38,8 @@ class Case1(BlankCase):
                  "b->s;\n" \
                  "}"
         links = [("a", "b")]
+        # links must be tuples
+        links = [tuple(x) for x in links]
         return pdir_dot, links
 
     def get_truth_bnet(self):
@@ -45,6 +47,7 @@ class Case1(BlankCase):
         dag = DAG("truth_dag",
                   BlankCase.new_dot_from_pdir_dot(self.pdir_dot,
                                         pdir_dot_addition))
+        # print("qqwwee", dag.nodes, dag.arrows)
         nd_to_size = {}
         for nd in dag.nodes:
             nd_to_size[nd] = 2
@@ -55,7 +58,11 @@ class Case1(BlankCase):
             nd_to_size)
         return TruthBayesNet(bnet)
 
+if __name__ == "__main__":
 
+    def main():
+        case = Case1()
+        case.run(draw=False, verbose=True)
 
-
+    main()
 

@@ -12,45 +12,48 @@ class GCF_calculator:
         self.dag_list = dag_list
         self.dag_to_link_directions = dag_to_link_directions
 
-        self.link_to_ab_hospi = {}
+        self.link_to_hospi_01 = {}
         self.dag_to_gcf = {}
-        self.set_link_to_ab_hospi()
+        self.set_link_to_hospi_01()
         self.set_dag_to_gcf()
 
-    def set_link_to_ab_hospi(self):
+    def set_link_to_hospi_01(self):
         nd_name_to_probs, link_to_ampu_probs = self.emp_probs
-
+        # print("ddccv", link_to_ampu_probs)
+        # print("llllk", self.links)
         for link in self.links:
-            nd_a, nd_b = link[0], link[1]
-            prob_a_bar_do_b, prob_b_bar_do_a = link_to_ampu_probs[link]
-            prob_a, prob_b = nd_name_to_probs[nd_a], nd_name_to_probs[nd_b]
-            size_a, size_b = prob_b_bar_do_a.shape
-            hospi_a = 0
-            hospi_b = 0
-            for k_a, k_b in product(range(size_a), range(size_b)):
-                x = prob_a[k_a]*prob_b[k_b]
-                y_do_a = np.log(prob_b[k_b]/prob_b_bar_do_a[k_a, k_b])
-                y_do_b = np.log(prob_a[k_a]/prob_a_bar_do_b[k_b, k_a])
-                hospi_a += x*y_do_a
-                hospi_b += x*y_do_b
+            nd_0, nd_1 = link[0], link[1]
+            prob_0_bar_do_1, prob_1_bar_do_0 = \
+                link_to_ampu_probs[link]
+            prob_0, prob_1 = \
+                nd_name_to_probs[nd_0], nd_name_to_probs[nd_1]
+            size_0, size_1 = prob_1_bar_do_0.shape
+            hospi_0 = 0
+            hospi_1 = 0
+            for k_0, k_1 in product(range(size_0), range(size_1)):
+                x = prob_0[k_0]*prob_1[k_1]
+                y_do_0 = np.log(prob_1[k_1]/prob_1_bar_do_0[k_0, k_1])
+                y_do_1 = np.log(prob_0[k_0]/prob_0_bar_do_1[k_1, k_0])
+                hospi_0 += x*y_do_0
+                hospi_1 += x*y_do_1
 
-            self.link_to_ab_hospi[link] = [hospi_a, hospi_b]
+            self.link_to_hospi_01[link] = [hospi_0, hospi_1]
 
     def set_dag_to_gcf(self):
         for dag in self.dag_list:
             d_sum = 0
             abs_d_sum = 0
             for k_link, link in enumerate(self.links):
-                points_to_b = \
-                    (self.dag_to_link_directions[dag][k_link] == "a->b")
-                hospi_a, hospi_b = self.link_to_ab_hospi[link]
-                hospi_dist = np.abs(hospi_a-hospi_b)
-                if hospi_a < hospi_b:
-                    hospi_b_is_larger = True
+                points_to_1 = \
+                    (self.dag_to_link_directions[dag][k_link] == "0->1")
+                hospi_0, hospi_1 = self.link_to_hospi_01[link]
+                hospi_dist = np.abs(hospi_0-hospi_1)
+                if hospi_0 < hospi_1:
+                    hospi_1_is_larger = True
                 else:
-                    hospi_b_is_larger = False
+                    hospi_1_is_larger = False
                 reward = - 1
-                if points_to_b == hospi_b_is_larger:
+                if points_to_1 == hospi_1_is_larger:
                     reward = 1
                 d_sum += reward*hospi_dist
                 abs_d_sum += hospi_dist

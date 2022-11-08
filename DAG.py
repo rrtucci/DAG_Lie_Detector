@@ -31,6 +31,16 @@ class DAG:
         dot += "}"
         return dot
 
+    def __str__(self):
+        s = "\nname: " + self.name
+        s += "\nnodes: "
+        for nd in self.nodes:
+            s += nd + ", "
+        s += "\narrows: "
+        for arrow in self.arrows:
+            s += repr(arrow) + ", "
+        return s
+
 
 if __name__ == "__main__":
 
@@ -41,7 +51,7 @@ if __name__ == "__main__":
               "n->s,a,b;\n" \
               "b->s\n"\
               "}"
-
+        print(DAG("G", dot))
         dag_list = [DAG("G_1", dot), DAG("G_2", dot)]
         print(DAG.get_dag_list_dot(dag_list))
 
