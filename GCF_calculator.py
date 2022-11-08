@@ -59,3 +59,12 @@ class GCF_calculator:
                 abs_d_sum += hospi_dist
             self.dag_to_gcf[dag] = d_sum / abs_d_sum
 
+    def print_hospi_01(self):
+        for link in self.links:
+            hospi_0, hospi_1 = self.link_to_hospi_01[link]
+            print("link", ", hospi_0", ", hospi_1")
+            print(link,"\t", '%.5f'%hospi_0, "\t", '%.5f'%hospi_1)
+
+    def print_GFCs(self):
+        for dag, gcf in self.dag_to_gcf.items():
+            print("dag=", dag.name, ",\tGCF=", "%.5f"%gcf)

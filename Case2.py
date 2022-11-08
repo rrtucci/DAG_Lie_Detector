@@ -1,22 +1,27 @@
 from BlankCase import *
 
-class Case1(BlankCase):
+
+
+class Case2(BlankCase):
     """
     https://dreampuf.github.io/GraphvizOnline/
-    dot_atlas/case1.dot
+
+    digraph G {
+    a->b [arrowhead=,color=red];
+    a->s;
+    n->s,a,b;
+    b->s
+    }
 
     """
 
     def __init__(self):
         BlankCase.__init__(self)
-        self.set_dot_file_path()
-        self.pdir_dot = BlankCase.get_pdir_dot(self.dot_file_path)
-        self.links = BlankCase.get_links(self.dot_file_path)
-        # print("werty", self.links)
+        self.pdir_dot, self.links = Case2.get_pdir_dot_and_links()
         self.dag_list, self.dag_to_link_directions = \
             BlankCase.get_dag_list(self.pdir_dot, self.links)
 
-        self.set_truth_bnet()
+        self.truth_bnet = self.get_truth_bnet()
         self.emp_probs = self.truth_bnet.emp_probs
 
         self.gcf_calculator = \
@@ -24,12 +29,22 @@ class Case1(BlankCase):
                            self.links,
                            self.dag_list,
                            self.dag_to_link_directions)
-    def set_dot_file_path(self):
-        self.dot_file_path = "dot_atlas/case1.dot"
 
-    def set_truth_bnet(self):
+    @staticmethod
+    def get_pdir_dot_and_links():
+        pdir_dot = "digraph G {\n" \
+                   "a->b"+edge_attr+";\n" \
+                                    "a->s;\n" \
+                                    "n->s,a,b;\n" \
+                                    "b->s;\n" \
+                                    "}"
+        links = [("a", "b")]
+        # links must be tuples
+        links = [tuple(x) for x in links]
+        return pdir_dot, links
+
+    def get_truth_bnet(self):
         pdir_dot_addition = ''
-        # print("dfgh", self.pdir_dot)
         dag = DAG("truth_dag",
                   BlankCase.new_dot_from_pdir_dot(self.pdir_dot,
                                                   pdir_dot_addition))
@@ -42,13 +57,13 @@ class Case1(BlankCase):
             dag.nodes,
             dag.arrows,
             nd_to_size)
-        self.truth_bnet = TruthBayesNet(bnet)
+        return TruthBayesNet(bnet)
 
 if __name__ == "__main__":
 
     def main(jupyter, draw):
-        case = Case1()
+        case = Case2()
         case.run(jupyter=jupyter, draw=draw)
 
-    main(jupyter=False, draw=True)
+    main(jupyter=False, draw=False)
 

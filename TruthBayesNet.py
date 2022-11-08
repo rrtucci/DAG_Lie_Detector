@@ -1,6 +1,8 @@
 from graphs.BayesNet import *
 from DAG import *
 from pprint import pprint
+import random
+random.seed(13)
 
 class TruthBayesNet(BayesNet):
 
@@ -20,12 +22,12 @@ class TruthBayesNet(BayesNet):
         # for nd in nodes:
         #     print("vvvvs", nd.name, nd.size, nd.potential.pot_arr.shape)
         full_pot = nodes[0].potential
-        for k in range(1, len(nodes)):
-            full_pot = full_pot*(nodes[k].potential)
+        for ampu_k in range(1, len(nodes)):
+            full_pot = full_pot*(nodes[ampu_k].potential)
         nd_name_to_probs = {}
         for nd in nodes:
             pot_arr = full_pot.get_new_marginal([nd]).pot_arr
-            nd_name_to_probs[nd.name] = np.copy(pot_arr)
+            nd_name_to_probs[nd.name] = pot_arr
             # print("llkhg", nd.name, nd.size)
         # print("gfrt", nd_name_to_probs)
         link_to_ampu_probs = {}
@@ -50,27 +52,28 @@ class TruthBayesNet(BayesNet):
                 for pa_nd in original_parents:
                     ampu_nd.remove_parent(pa_nd)
                     # print("ooppp", ampu_nd.name)
-                # print("dddff", amputee, "\n", ampu_bnet)
-                for k in range(ampu_size):
+                # print("dddff", link, amputee, "\n", ampu_bnet)
+                for ampu_k in range(ampu_size):
                     ampu_nd.potential = Potential(
                         False,
                         [ampu_nd],
                         pot_arr=np.zeros((ampu_size,)))
-                    ampu_nd.potential.pot_arr[k] = 1
-                    # print("lkknm", amputee, "\n", ampu_bnet)
-                    ord_nodes = list(ampu_bnet.nodes)
-                    full_pot = ord_nodes[0].potential
+                    ampu_nd.potential.pot_arr[ampu_k] = 1
+                    # print("lkknm", link, amputee, ampu_k, "\n", ampu_bnet)
+                    nds = list(ampu_bnet.nodes)
+                    full_pot = nds[0].potential
                     for j in range(1, len(self.nodes)):
-                        full_pot = full_pot*(ord_nodes[j].potential)
+                        full_pot = full_pot*(nds[j].potential)
                     ampu_pot = full_pot.get_new_marginal(
                         [ampu_nd, not_ampu_nd])
-                    # print("hhjki", ampu_pot)
+                    # print("hhjki-link-amputee-k",
+                    #       link, amputee, ampu_k, "\n", ampu_pot)
                     if amputee == 0:
-                        prob_1_bar_do_0[k, :] = \
-                            ampu_pot.pot_arr[k, :]
+                        prob_1_bar_do_0[ampu_k, :] = \
+                            ampu_pot.pot_arr[ampu_k, :]
                     else:
-                        prob_0_bar_do_1[k, :] = \
-                            ampu_pot.pot_arr[k, :]
+                        prob_0_bar_do_1[ampu_k, :] = \
+                            ampu_pot.pot_arr[ampu_k, :]
             # list L can't be used as key to dictionary
             # but tuple(L) or repr(L) can be
             link_to_ampu_probs[link]= \
@@ -86,15 +89,14 @@ class TruthBayesNet(BayesNet):
             nd = BayesNode(k, name=node_name)
             nd.size = nd_to_size[node_name]
             bnet_nodes.append(nd)
-        bnet_nodes = set(bnet_nodes)
-        bnet = BayesNet(bnet_nodes)
+        bnet = BayesNet(set(bnet_nodes))
         for arrow in arrows:
             pa_nd = bnet.get_node_named(arrow[0])
             child_nd = bnet.get_node_named(arrow[1])
             child_nd.add_parent(pa_nd)
 
         # print("ccvv", bnet.nodes)
-        for nd in bnet.nodes:
+        for nd in bnet_nodes:
             ord_nodes = list(nd.parents) + [nd]
             # print("llkjh", ord_nodes)
             nd.potential = DiscreteCondPot(False, ord_nodes)
@@ -105,7 +107,7 @@ class TruthBayesNet(BayesNet):
 
 if __name__ == "__main__":
 
-    def main(draw=False, verbose=True):
+    def main(draw=False):
         dot = "digraph G {\n" \
               "a->b;\n" \
               "a->s;\n" \
@@ -121,17 +123,18 @@ if __name__ == "__main__":
             dag.nodes,
             dag.arrows,
             nd_to_size)
+        print("Truth bnet (used to simulate empirical probs):")
         if draw:
             bnet.gv_draw(jupyter=False)
-        if verbose:
-            print(bnet)
+        print(bnet)
 
         truth_bnet = TruthBayesNet(bnet)
-        print("ddfgg", truth_bnet)
+        # print("ddfgg", truth_bnet)
         emp_probs = truth_bnet.emp_probs
         nd_name_to_probs, link_to_ampu_probs = emp_probs
-        print('node name to probabilities:')
+        print('simulated empirical single node probs:')
         pprint(nd_name_to_probs)
+        print("\nsimulated empirical do-query probs:")
         for link in truth_bnet.links:
             prob_0_bar_do_1, prob_1_bar_do_0 = \
                 link_to_ampu_probs[link]
@@ -141,4 +144,4 @@ if __name__ == "__main__":
             print("prob_1_bar_do_0:")
             pprint(prob_1_bar_do_0)
 
-    main(draw=False, verbose=False)
+    main(draw=False)

@@ -5,12 +5,13 @@ from itertools import product
 import graphviz as gv
 from IPython.display import display, Image
 from PIL.Image import open as open_image
-import random
-random.seed(13)
+
+edge_attr = "[arrowhead=none,color=red]"
 
 class BlankCase:
 
     def __init__(self):
+        self.dot_file_path = None
         self.pdir_dot = None
         self.links = None
         self.dag_list = None
@@ -19,6 +20,31 @@ class BlankCase:
 
         # not used if directory 'link_to_emp_probs' given as input
         self.truth_bnet = None
+
+    @staticmethod
+    def get_pdir_dot(dot_file_path):
+        with open(dot_file_path, "r") as f:
+            pdir_dot = f.read()
+        return pdir_dot
+
+    @staticmethod
+    def get_links(dot_file_path):
+        links = []
+        with open(dot_file_path) as f:
+            in_lines = f.readlines()
+        for line in in_lines:
+            if edge_attr in line:
+                line = line.replace(edge_attr, "")
+                line = line.replace(";", "")
+                split_list = line.split(sep="->")
+                nd_0 = split_list[0].strip()
+                nd_1 = split_list[1].strip()
+                # links must be tuples
+                # They can't be lists because they will be
+                # used as keys to dictionaries
+                links.append((nd_0, nd_1))
+        return links
+
 
     @staticmethod
     def get_dag_list(pdir_dot, links):
@@ -39,7 +65,7 @@ class BlankCase:
             "".join(x.split())
             num_links = len(links)
             for k in range(num_links):
-                old_str = links[k][0] + "->" + links[k][1] + "[arrowhead=none]"
+                old_str = links[k][0] + "->" + links[k][1] + edge_attr
                 new_str = dir_links[k]
                 x = x.replace(old_str, new_str)
             # newline after every semicolon
@@ -87,27 +113,30 @@ class BlankCase:
         if pdir_dot_addition:
             new_dot = pdir_dot.replace('{', '{' + pdir_dot_addition)
         else:
-            new_dot = str(pdir_dot)
-        new_dot = new_dot.replace("[arrowhead=none]", "")
+            new_dot = pdir_dot
+
+        new_dot = new_dot.replace(edge_attr, "")
         return new_dot
 
-    def run(self, jupyter=False, draw=False, verbose=True):
+    def run(self, jupyter=False, draw=False):
         if self.truth_bnet:
-            print("Truth bnet (used to simulate emp_probs):")
+            print("Truth bnet (used to simulate empirical probs):")
             if draw:
                 self.truth_bnet.gv_draw(jupyter)
             print(self.truth_bnet)
-        print("Partially Directed (PD) graph:")
+        print("Partially Directed graph G_pd:")
+        print(self.pdir_dot)
         if draw:
             BlankCase.draw_dot(self.pdir_dot, jupyter)
-        print(self.pdir_dot)
-        print("DAG list (non-maximal generation of PD graph):")
+        print("DAGs for which GCF will be calculated"
+              " (non-maximal generation of G_pd)")
+        for dag in self.dag_list:
+            print(dag)
         if draw:
             BlankCase.draw_dot(
                 DAG.get_dag_list_dot(self.dag_list),
                 jupyter)
-        for dag in self.dag_list:
-            print(dag)
+        print("\nlink to hospitalities:")
+        self.gcf_calculator.print_hospi_01()
         print("\nGCF for each dag:")
-        for dag, gcf in self.gcf_calculator.dag_to_gcf.items():
-            print("dag=", dag.name, ",\tGCF=", gcf)
+        self.gcf_calculator.print_GFCs()

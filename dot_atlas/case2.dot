@@ -1,0 +1,7 @@
+digraph G {
+a->b [arrowhead=false,color=red];
+b->c [arrowhead=false,color=red];
+a->d;
+c->d;
+d->e
+}

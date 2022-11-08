@@ -1,0 +1,6 @@
+digraph G {
+a->b[arrowhead=none,color=red];
+a->s;
+n->s,a,b;
+b->s
+}
