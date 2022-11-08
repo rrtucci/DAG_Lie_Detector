@@ -1,6 +1,6 @@
 # DAG_Lie_Detector
 
-![From movie Basic Instincts](basic-instincts.jpg)
+![From movie Basic Instinct](basic-instinct.jpg)
 
 This repo includes a folder
 of jupyter notebooks
