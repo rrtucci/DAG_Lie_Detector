@@ -59,17 +59,18 @@ class BlankCase:
         -------
 
         """
-        def get_dot(pdir_dot, links, dir_links):
-            x = str(pdir_dot)
-            # trim all white space, including empty space and \n, \t
-            "".join(x.split())
+        def get_no_attr_dag_dot(pdir_dot, links, dir_links):
+            x = pdir_dot
+            # print("yyyj1", x)
+            # trim all empty space
+            x = x.replace(" ", "")
+            # print("yyyj1.1", x)
             num_links = len(links)
             for k in range(num_links):
                 old_str = links[k][0] + "->" + links[k][1] + edge_attr
                 new_str = dir_links[k]
                 x = x.replace(old_str, new_str)
-            # newline after every semicolon
-            x.replace(";", ";\n")
+            # print("yyyj2", x)
 
             return x
 
@@ -88,7 +89,7 @@ class BlankCase:
                 else:
                     dir_links.append(link[1] + "->" + link[0])
             dag = DAG("G_" + str(dag_index), 
-                      get_dot(pdir_dot, links, dir_links))
+                      get_no_attr_dag_dot(pdir_dot, links, dir_links))
             dag_list.append(dag)
             dag_to_link_directions[dag] = link_directions
         # for dag in dag_list:
@@ -108,15 +109,6 @@ class BlankCase:
         else:
             open_image("tempo.png").show()
 
-    @staticmethod
-    def new_dot_from_pdir_dot(pdir_dot, pdir_dot_addition):
-        if pdir_dot_addition:
-            new_dot = pdir_dot.replace('{', '{' + pdir_dot_addition)
-        else:
-            new_dot = pdir_dot
-
-        new_dot = new_dot.replace(edge_attr, "")
-        return new_dot
 
     def run(self, jupyter=False, draw=False):
         if self.truth_bnet:

@@ -28,11 +28,11 @@ class Case1(BlankCase):
         self.dot_file_path = "dot_atlas/case1.dot"
 
     def set_truth_bnet(self):
-        pdir_dot_addition = ''
-        # print("dfgh", self.pdir_dot)
-        dag = DAG("truth_dag",
-                  BlankCase.new_dot_from_pdir_dot(self.pdir_dot,
-                                                  pdir_dot_addition))
+        # choose any dag from dag_list and add legal structure to its dot
+        dag = self.dag_list[0]
+        dot_addition = ''
+        enhanced_dot = dag.dot.replace("{","{" + dot_addition)
+        dag = DAG("truth_dag", enhanced_dot)
         # print("qqwwee", dag.nodes, dag.arrows)
         nd_to_size = {}
         for nd in dag.nodes:

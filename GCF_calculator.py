@@ -57,7 +57,7 @@ class GCF_calculator:
                     reward = 1
                 d_sum += reward*hospi_dist
                 abs_d_sum += hospi_dist
-            self.dag_to_gcf[dag] = d_sum / abs_d_sum
+            self.dag_to_gcf[dag] = d_sum / max(abs_d_sum, 1e-10)
 
     def print_hospi_01(self):
         for link in self.links:

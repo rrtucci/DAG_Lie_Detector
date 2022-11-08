@@ -1,6 +1,6 @@
 digraph G {
-a->b [arrowhead=false,color=red];
-b->c [arrowhead=false,color=red];
+a->b [arrowhead=none,color=red];
+b->c [arrowhead=none,color=red];
 a->d;
 c->d;
 d->e

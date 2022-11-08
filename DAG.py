@@ -5,6 +5,7 @@ class DAG:
 
     def __init__(self, name, dot):
         self.name = name
+        self.dot = dot
         self.nodes = None
         self.arrows = None
         with open("tempo13.txt", "w") as file:
