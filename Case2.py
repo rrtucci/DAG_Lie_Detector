@@ -31,11 +31,12 @@ class Case2(BlankCase):
         # choose any dag from dag_list and add legal structure to its dot
         dag = self.dag_list[0]
         dot_addition = ''
-        enhanced_dot = dag.dot.replace("{","{" +dot_addition)
-        print('kkklll1', dag.dot)
-        print('kkklll2', enhanced_dot)
+        enhanced_dot = dag.basic_dot.replace("{", "{" + dot_addition)
+        # print('kkklll1', dag.basic_dot)
+        # print('kkklll2', enhanced_dot)
         dag = DAG("truth_dag", enhanced_dot)
         # print("qqwwee", dag.nodes, dag.arrows)
+        print("\nWe are choosing a truth bnet with the same structure as G_1")
         nd_to_size = {}
         for nd in dag.nodes:
             nd_to_size[nd] = 2

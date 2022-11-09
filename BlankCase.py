@@ -128,7 +128,7 @@ class BlankCase:
             BlankCase.draw_dot(
                 DAG.get_dag_list_dot(self.dag_list),
                 jupyter)
-        print("\nlink to hospitalities:")
-        self.gcf_calculator.print_hospi_01()
+        print("\nlink to heights:")
+        self.gcf_calculator.print_heights_01()
         print("\nGCF for each dag:")
         self.gcf_calculator.print_GFCs()

@@ -3,13 +3,13 @@ from TruthBayesNet import *
 
 class DAG:
 
-    def __init__(self, name, dot):
+    def __init__(self, name, basic_dot):
         self.name = name
-        self.dot = dot
+        self.basic_dot = basic_dot
         self.nodes = None
         self.arrows = None
         with open("tempo13.txt", "w") as file:
-            file.write(dot)
+            file.write(basic_dot)
 
         self.nodes, self.arrows = \
             DotTool.read_dot_file("tempo13.txt")
