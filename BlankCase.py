@@ -10,16 +10,28 @@ edge_attr = "[arrowhead=none,color=red]"
 
 class BlankCase:
 
-    def __init__(self):
-        self.dot_file_path = None
-        self.pdir_dot = None
-        self.links = None
-        self.dag_list = None
-        self.dag_to_link_directions = None
-        self.gcf_calculator = None
+    def __init__(self, dot_file_path, emp_probs=None):
+        self.pdir_dot = BlankCase.get_pdir_dot(dot_file_path)
+        self.links = BlankCase.get_links(dot_file_path)
+        # print("werty", self.links)
+        self.dag_list, self.dag_to_link_directions = \
+            BlankCase.get_dag_list(self.pdir_dot, self.links)
 
-        # not used if directory 'link_to_emp_probs' given as input
+        self.emp_probs = emp_probs
+        # not used if emp_probs is not None
         self.truth_bnet = None
+        if emp_probs is None:
+            self.truth_bnet = self.get_truth_bnet()
+            self.emp_probs = self.truth_bnet.emp_probs
+
+        self.gcf_calculator = \
+            GCF_calculator(self.emp_probs,
+                           self.links,
+                           self.dag_list,
+                           self.dag_to_link_directions)
+
+    def get_truth_bnet(self):
+        assert False
 
     @staticmethod
     def get_pdir_dot(dot_file_path):
@@ -44,7 +56,6 @@ class BlankCase:
                 # used as keys to dictionaries
                 links.append((nd_0, nd_1))
         return links
-
 
     @staticmethod
     def get_dag_list(pdir_dot, links):

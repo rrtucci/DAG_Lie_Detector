@@ -7,28 +7,10 @@ class Case3(BlankCase):
 
     """
 
-    def __init__(self):
-        BlankCase.__init__(self)
-        self.set_dot_file_path()
-        self.pdir_dot = BlankCase.get_pdir_dot(self.dot_file_path)
-        self.links = BlankCase.get_links(self.dot_file_path)
-        # print("werty", self.links)
-        self.dag_list, self.dag_to_link_directions = \
-            BlankCase.get_dag_list(self.pdir_dot, self.links)
+    def __init__(self, dot_file_path, emp_probs=None):
+        BlankCase.__init__(self, dot_file_path, emp_probs=None)
 
-        self.set_truth_bnet()
-        self.emp_probs = self.truth_bnet.emp_probs
-
-        self.gcf_calculator = \
-            GCF_calculator(self.emp_probs,
-                           self.links,
-                           self.dag_list,
-                           self.dag_to_link_directions)
-
-    def set_dot_file_path(self):
-        self.dot_file_path = "dot_atlas/case3.dot"
-
-    def set_truth_bnet(self):
+    def get_truth_bnet(self):
         # choose any dag from dag_list and add legal structure to its dot
         dag = self.dag_list[0]
         dot_addition = ''
@@ -44,12 +26,13 @@ class Case3(BlankCase):
             dag.nodes,
             dag.arrows,
             nd_to_size)
-        self.truth_bnet = TruthBayesNet(bnet)
+        truth_bnet = TruthBayesNet(bnet)
+        return truth_bnet
 
 if __name__ == "__main__":
 
     def main(jupyter, draw):
-        case = Case3()
+        case = Case3("dot_atlas/case3.dot")
         case.run(jupyter=jupyter, draw=draw)
 
     main(jupyter=False, draw=True)
