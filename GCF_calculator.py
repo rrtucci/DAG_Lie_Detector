@@ -2,11 +2,24 @@ from itertools import product
 import numpy as np
 
 class GCF_calculator:
+    """
+
+    """
+
     def __init__(self,
                  emp_probs,
                  links,
                  dag_list,
                  dag_to_link_directions):
+        """
+
+        Parameters
+        ----------
+        emp_probs
+        links
+        dag_list
+        dag_to_link_directions
+        """
         self.emp_probs = emp_probs
         self.links = links
         self.dag_list = dag_list
@@ -18,6 +31,12 @@ class GCF_calculator:
         self.set_dag_to_gcf()
 
     def set_link_to_heights_01(self):
+        """
+
+        Returns
+        -------
+
+        """
         nd_name_to_probs, link_to_ampu_probs = self.emp_probs
         # print("ddccv", link_to_ampu_probs)
         # print("llllk", self.links)
@@ -40,6 +59,12 @@ class GCF_calculator:
             self.link_to_heights_01[link] = [height_0, height_1]
 
     def set_dag_to_gcf(self):
+        """
+
+        Returns
+        -------
+
+        """
         for dag in self.dag_list:
             d_sum = 0
             abs_d_sum = 0
@@ -60,11 +85,23 @@ class GCF_calculator:
             self.dag_to_gcf[dag] = d_sum / max(abs_d_sum, 1e-10)
 
     def print_heights_01(self):
+        """
+
+        Returns
+        -------
+
+        """
         for link in self.links:
             height_0, height_1 = self.link_to_heights_01[link]
             print("link", ", height_0", ", height_1")
             print(link,"\t", '%.5f'%height_0, "\t", '%.5f'%height_1)
 
     def print_GFCs(self):
+        """
+
+        Returns
+        -------
+
+        """
         for dag, gcf in self.dag_to_gcf.items():
             print("dag=", dag.name, ",\tGCF=", "%.5f"%gcf)

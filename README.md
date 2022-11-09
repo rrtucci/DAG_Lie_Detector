@@ -11,7 +11,7 @@ The Python code in this repo calculates
 the Goodness of Causal Fit (GCF)
 for all the DAGs in a set,
 using the algorithm proposed in
-the following arXiv paper:
+the following paper:
 
-* [Goodness of Causal Fit](https://arxiv.org/abs/2105.02172) by Robert R. Tucci
+* [Goodness of Causal Fit](https://github.com/rrtucci/goodness-c-fit/blob/master/gcf.pdf) by Robert R. Tucci
 

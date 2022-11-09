@@ -2,8 +2,18 @@ from graphs.BayesNet import *
 from TruthBayesNet import *
 
 class DAG:
+    """
+
+    """
 
     def __init__(self, name, basic_dot):
+        """
+
+        Parameters
+        ----------
+        name
+        basic_dot
+        """
         self.name = name
         self.basic_dot = basic_dot
         self.nodes = None
@@ -18,6 +28,7 @@ class DAG:
     @staticmethod
     def get_dag_list_dot(dag_list):
         """
+
         dag_list : list[DAG]
 
         Returns
@@ -33,6 +44,12 @@ class DAG:
         return dot
 
     def __str__(self):
+        """
+
+        Returns
+        -------
+
+        """
         s = "\nname: " + self.name
         s += "\nnodes: "
         for nd in self.nodes:

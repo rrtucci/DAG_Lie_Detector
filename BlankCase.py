@@ -9,8 +9,18 @@ from PIL.Image import open as open_image
 edge_attr = "[arrowhead=none,color=red]"
 
 class BlankCase:
+    """
+
+    """
 
     def __init__(self, dot_file_path, emp_probs=None):
+        """
+
+        Parameters
+        ----------
+        dot_file_path
+        emp_probs
+        """
         self.pdir_dot = BlankCase.get_pdir_dot(dot_file_path)
         self.links = BlankCase.get_links(dot_file_path)
         # print("werty", self.links)
@@ -31,16 +41,42 @@ class BlankCase:
                            self.dag_to_link_directions)
 
     def get_truth_bnet(self):
+        """
+
+        Returns
+        -------
+
+        """
         assert False
 
     @staticmethod
     def get_pdir_dot(dot_file_path):
+        """
+
+        Parameters
+        ----------
+        dot_file_path
+
+        Returns
+        -------
+
+        """
         with open(dot_file_path, "r") as f:
             pdir_dot = f.read()
         return pdir_dot
 
     @staticmethod
     def get_links(dot_file_path):
+        """
+
+        Parameters
+        ----------
+        dot_file_path
+
+        Returns
+        -------
+
+        """
         links = []
         with open(dot_file_path) as f:
             in_lines = f.readlines()
@@ -63,7 +99,7 @@ class BlankCase:
 
         Parameters
         ----------
-        pdir_dot : str
+        pdir_dot
         links
 
         Returns
@@ -109,6 +145,17 @@ class BlankCase:
 
     @staticmethod
     def draw_dot(dot, jupyter):
+        """
+
+        Parameters
+        ----------
+        dot
+        jupyter
+
+        Returns
+        -------
+
+        """
         # using display(s) will draw the graph but will not embed it
         # permanently in the notebook. To embed it permanently,
         # must generate temporary image file and use Image().
@@ -122,6 +169,17 @@ class BlankCase:
 
 
     def run(self, jupyter=False, draw=False):
+        """
+
+        Parameters
+        ----------
+        jupyter
+        draw
+
+        Returns
+        -------
+
+        """
         if self.truth_bnet:
             print("Truth bnet (used to simulate empirical probs):")
             if draw:

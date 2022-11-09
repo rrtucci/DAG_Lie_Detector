@@ -5,6 +5,9 @@ import random
 random.seed(13)
 
 class TruthBayesNet(BayesNet):
+    """
+
+    """
 
     def __init__(self, bnet):
         BayesNet.__init__(self, bnet.nodes)
@@ -18,6 +21,12 @@ class TruthBayesNet(BayesNet):
         self.set_emp_probs()
 
     def set_emp_probs(self):
+        """
+
+        Returns
+        -------
+
+        """
         nodes = list(self.nodes)
         # for nd in nodes:
         #     print("vvvvs", nd.name, nd.size, nd.potential.pot_arr.shape)
@@ -84,6 +93,18 @@ class TruthBayesNet(BayesNet):
     def create_random_bnet(nodes,
                            arrows,
                            nd_to_size):
+        """
+
+        Parameters
+        ----------
+        nodes
+        arrows
+        nd_to_size
+
+        Returns
+        -------
+
+        """
         bnet_nodes = []
         for k, node_name in enumerate(nodes):
             nd = BayesNode(k, name=node_name)
