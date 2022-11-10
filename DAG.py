@@ -53,7 +53,7 @@ class DAG:
     @staticmethod
     def get_dag_list_dot(dag_list):
         """
-        This method creates a dot string from a list of DAG instances.
+        This method returns a dot string created from a list of DAG instances.
 
         Parameters
         ----------

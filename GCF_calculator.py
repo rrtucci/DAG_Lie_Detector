@@ -5,8 +5,8 @@ import numpy as np
 class GCF_calculator:
     """
     This class calculates the GCF (goodness of causal fit) for a list of DAG
-    objects inputted through the variable 'dag_list'. GCF is a causal
-    fitness score that is defined in the following paper
+    objects inputted to its constructor via the variable 'dag_list'. GCF is
+    a causal fitness score that is defined in the following paper
 
     https://github.com/rrtucci/goodness-c-fit/blob/master/gcf.pdf
 
@@ -66,7 +66,7 @@ class GCF_calculator:
 
         links: list[tuple[str,str]]
         dag_list: list[DAG]
-        dag_to_link_directions: dict[DAG, tuple(str)]
+        dag_to_link_directions: dict[DAG, list[str]]
         """
         self.emp_probs = emp_probs
         self.links = links

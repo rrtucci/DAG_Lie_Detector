@@ -25,7 +25,7 @@ class TruthBayesNet(BayesNet):
         which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
         'a', 'b').
 
-    links: tuple[str, str]
+    links: list[tuple[str, str]]
 
     """
 
@@ -133,7 +133,7 @@ class TruthBayesNet(BayesNet):
         nodes: list[str]
             example: ['a', 'b', 'c']
         arrows: list[tuple[str, str]]
-            example[('a', 'b'), ('a', 'c')]
+            example: [('a', 'b'), ('a', 'c')]
         nd_to_size: dict[str, int]
             dictionary mapping node name to its size (i.e., the number of
             values or states)

@@ -132,10 +132,10 @@ class BlankCase:
     @staticmethod
     def get_links(dot_file_path):
         """
-        In this app, a link is an undirected edge of a graph, specified as a
-        tuple of two strings that are the names of the two nodes the link
-        connects; for instance, ('a', 'b') is a link between nodes 'a' and
-        'b'.
+        In this app, a link is an undirected edge of a graph (i.e.,
+        network), specified as a tuple of two strings that are the names of
+        the two nodes that the link connects; for instance, ('a', 'b') is a
+        link between nodes 'a' and 'b'.
 
         This method reads a dot file located at 'dot_file_path'. That dot
         file is expected to specify a partially directed graph, which is a
@@ -202,7 +202,7 @@ class BlankCase:
             links: list[tuple[str, str]]
                 for example, [('a', 'b'), ('b', 'c')]
             dir_links: list[str]
-                for example, ["a->b", "a->c"]
+                for example, ["a->b", "b->c"]
 
             Returns
             -------
@@ -248,14 +248,14 @@ class BlankCase:
     @staticmethod
     def draw_dot(dot, jupyter):
         """
-        This method draws a dot file 'dot'.
+        This method draws the dot file 'dot'.
 
         Parameters
         ----------
         dot: str
-        jupyter: True
-        Use jupyter=False if drawing to a console, and jupyter=True if
-        drawing to a jupyter notebook.
+        jupyter: bool
+            Use jupyter=False if drawing to a console, and jupyter=True if
+            drawing to a jupyter notebook.
 
 
         Returns
