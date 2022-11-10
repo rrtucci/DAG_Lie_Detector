@@ -6,10 +6,36 @@ random.seed(13)
 
 class TruthBayesNet(BayesNet):
     """
+    This class takes as input 'bnet' which is an object of the class
+    graphs/BayesNet. It uses 'bnet' to simulate the empirical probabilities
+    emp_probs.
+
+    Attributes
+    ----------
+    emp_probs: list[dict, dict]
+        empirical probabilities. More specifically, emp_probs equals
+        [node_name_to_probs, link_to_ampu_probs]
+
+        'node_name_to_probs' dict[str, np.array] is a dictionary that
+        maps each node name like 'a' to its probability 1dim numpy array
+        like P(a).
+
+        'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
+        is a dictionary that maps a link to its amputated probabilities,
+        which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
+        'a', 'b').
+
+    links: tuple[str, str]
 
     """
 
     def __init__(self, bnet):
+        """
+
+        Parameters
+        ----------
+        bnet: BayesNet
+        """
         BayesNet.__init__(self, bnet.nodes)
         self.links = []
         for pa_nd in bnet.nodes:
@@ -22,9 +48,11 @@ class TruthBayesNet(BayesNet):
 
     def set_emp_probs(self):
         """
+        This method sets the empirical probabilities emp_probs.
 
         Returns
         -------
+        None
 
         """
         nodes = list(self.nodes)
@@ -94,15 +122,25 @@ class TruthBayesNet(BayesNet):
                            arrows,
                            nd_to_size):
         """
+        This method returns a BayesNet object whose structure is given by
+        'nodes' and 'arrows'. The TPM (transition probability matrix) for
+        each node is created at random, with the only constraint being that
+        the number of states of each node be as specified by the input
+        'nd_to_size'.
 
         Parameters
         ----------
-        nodes
-        arrows
-        nd_to_size
+        nodes: list[str]
+            example: ['a', 'b', 'c']
+        arrows: list[tuple[str, str]]
+            example[('a', 'b'), ('a', 'c')]
+        nd_to_size: dict[str, int]
+            dictionary mapping node name to its size (i.e., the number of
+            values or states)
 
         Returns
         -------
+        BayesNet
 
         """
         bnet_nodes = []

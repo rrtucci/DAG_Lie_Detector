@@ -1,16 +1,20 @@
 from BlankCase import *
 
+
 class Case1(BlankCase):
     """
-    See docstring for class BlankCase. The constructor for this class should
-    use the following dot_file_path
+    The constructor for this class should use the following dot_file_path.
+    See docstring for class BlankCase for more info.
 
     dot_atlas/case1.dot
+
+    Attributes
+    ----------
 
     """
 
     def __init__(self, dot_file_path, emp_probs=None):
-        BlankCase.__init__(self, dot_file_path, emp_probs=None)
+        BlankCase.__init__(self, dot_file_path, emp_probs=emp_probs)
 
     def get_truth_bnet(self):
         # choose any dag from dag_list and add legal structure to its dot
@@ -30,6 +34,7 @@ class Case1(BlankCase):
             nd_to_size)
         truth_bnet = TruthBayesNet(bnet)
         return truth_bnet
+
 
 if __name__ == "__main__":
 

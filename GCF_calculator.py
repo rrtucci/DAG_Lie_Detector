@@ -1,8 +1,43 @@
 from itertools import product
 import numpy as np
 
+
 class GCF_calculator:
     """
+    This class calculates GCF (goodness of causal fit) for a list of DAG
+    objects inputted through the variable 'dag_list'. GCF is a causal
+    fitness score that is defined in the following paper
+
+    https://github.com/rrtucci/goodness-c-fit/blob/master/gcf.pdf
+
+    In order to do this, the class requires as input 'emp_probs' (empirical
+    probabilities), 'links' (a list of the undirected edges (i.e., links) )
+    and a dictionary 'dag_to_link_directions' mapping each dag to the
+    directions of the links listed in 'links'.
+
+    'emp_probs' can be calculated from the data by some external program and
+    handed to this one. Alternatively, it can be simulated by the class
+    TruthBayesNet.
+
+    Attributes
+    ---------
+    dag_list: list[DAG]
+    dag_to_gcf: dict[DAG, float]
+    dag_to_link_directions: dict[DAG, list[str]]
+    emp_probs: list[dict, dict]
+        empirical probabilities. More specifically, emp_probs equals
+        [node_name_to_probs, link_to_ampu_probs]
+
+        'node_name_to_probs' dict[str, np.array] is a dictionary that
+        maps each node name like 'a' to its probability 1dim numpy array
+        like P(a).
+
+        'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
+        is a dictionary that maps a link to its amputated probabilities,
+        which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
+        'a', 'b').
+    link_to_heights_01: dict[tuple[str, str], list[float, float]]
+    links: tuple[str, str]
 
     """
 
@@ -15,10 +50,22 @@ class GCF_calculator:
 
         Parameters
         ----------
-        emp_probs
-        links
-        dag_list
-        dag_to_link_directions
+        emp_probs: list[dict, dict]
+            empirical probabilities. More specifically, emp_probs equals
+            [node_name_to_probs, link_to_ampu_probs]
+
+            'node_name_to_probs' dict[str, np.array] is a dictionary that
+            maps each node name like 'a' to its probability 1dim numpy array
+            like P(a).
+
+            'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
+            is a dictionary that maps a link to its amputated probabilities,
+            which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
+            'a', 'b').
+
+        links: list[tuple[str,str]]
+        dag_list: list[DAG]
+        dag_to_link_directions: dict[DAG, tuple(str)]
         """
         self.emp_probs = emp_probs
         self.links = links
@@ -32,9 +79,14 @@ class GCF_calculator:
 
     def set_link_to_heights_01(self):
         """
+        This method sets the parameter 'self.link_to_heights_01' which is a
+        dictionary that maps each link to a list of two floats height_0,
+        height_1. For a link ('a_0', 'a_1'), height_0 (resp., height_1) is
+        the height of node '0' (resp., '1')
 
         Returns
         -------
+        None
 
         """
         nd_name_to_probs, link_to_ampu_probs = self.emp_probs
@@ -60,9 +112,13 @@ class GCF_calculator:
 
     def set_dag_to_gcf(self):
         """
+        This method sets the parameter 'self.dag_to_gcf' which is a
+        dictionary that maps each DAG object (in the list self.dag_list) to
+        its GCF.
 
         Returns
         -------
+        None
 
         """
         for dag in self.dag_list:
@@ -86,22 +142,27 @@ class GCF_calculator:
 
     def print_heights_01(self):
         """
+        This method the two floats height_0 and height_1 ffor each element of
+        'self.links'.
 
         Returns
         -------
+        None
 
         """
         for link in self.links:
             height_0, height_1 = self.link_to_heights_01[link]
             print("link", ", height_0", ", height_1")
-            print(link,"\t", '%.5f'%height_0, "\t", '%.5f'%height_1)
+            print(link, "\t", '%.5f' % height_0, "\t", '%.5f' % height_1)
 
-    def print_GFCs(self):
+    def print_GCFs(self):
         """
+        This method the float GCF each DAG object in the list 'self.dag_list'.
 
         Returns
         -------
+        None
 
         """
         for dag, gcf in self.dag_to_gcf.items():
-            print("dag=", dag.name, ",\tGCF=", "%.5f"%gcf)
+            print("dag=", dag.name, ",\tGCF=", "%.5f" % gcf)

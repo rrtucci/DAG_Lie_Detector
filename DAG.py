@@ -1,8 +1,33 @@
 from graphs.BayesNet import *
 from TruthBayesNet import *
 
+
 class DAG:
     """
+    This is a very simple class that takes as input a "basic_dot" string.
+    Here is an example of a basic dot:
+
+            dot = "digraph G {\n" \
+              "a->b;\n" \
+              "a->s;\n" \
+              "n->s,a,b;\n" \
+              "b->s\n"\
+              "}"
+
+    Note that each line referring to arrows ends with a semicolon, except
+    the last one, for which the semicolon is optional. Note that it contains
+    no node attributes, so all edges are directed.
+
+    From the basic dot, this class extracts the names of the nodes of the
+    DAG and puts them in a list 'self.nodes'. It also extracts the edges (
+    e.g., ('a', 'b')) of the DAG and puts them in a list 'self.arrows'.
+
+    Attributes
+    ----------
+    arrows: tuple[str, str]
+    basic_dot: str
+    name: str
+    nodes: list[str]
 
     """
 
@@ -11,8 +36,9 @@ class DAG:
 
         Parameters
         ----------
-        name
-        basic_dot
+        name: str
+            name given to the DAG being created
+        basic_dot: str
         """
         self.name = name
         self.basic_dot = basic_dot
@@ -24,15 +50,16 @@ class DAG:
         self.nodes, self.arrows = \
             DotTool.read_dot_file("tempo13.txt")
 
-
     @staticmethod
     def get_dag_list_dot(dag_list):
         """
+        This method creates a dot string from a list of DAG objects.
 
         dag_list : list[DAG]
 
         Returns
         -------
+        str
 
         """
         dot = "digraph {\n"

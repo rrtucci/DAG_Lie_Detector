@@ -8,6 +8,7 @@ from PIL.Image import open as open_image
 
 edge_attr = "[arrowhead=none,color=red]"
 
+
 class BlankCase:
     """
     This is an abstract class. Children subclasses of this class, such as
@@ -28,6 +29,27 @@ class BlankCase:
     that because it generates a Bayesian Network (bnet) that represents "the
     truth", and uses that bnet to simulate the empirical probabilities.
 
+    Attributes
+    ----------
+    dag_list: list[DAG]
+    dag_to_link_directions: dict[DAG, list[str]]
+    emp_probs: list[dict, dict]
+        empirical probabilities. More specifically, emp_probs equals
+        [node_name_to_probs, link_to_ampu_probs]
+
+        'node_name_to_probs' dict[str, np.array] is a dictionary that
+        maps each node name like 'a' to its probability 1dim numpy array
+        like P(a).
+
+        'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
+        is a dictionary that maps a link to its amputated probabilities,
+        which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
+        'a', 'b').
+    gcf_calculator: GCF_calculator
+    links: tuple[str, str]
+    pdir_dot: str
+    truth_bnet: TruthBayesNet
+
     """
 
     def __init__(self, dot_file_path, emp_probs=None):
@@ -40,8 +62,16 @@ class BlankCase:
         emp_probs: list[dict, dict]
             empirical probabilities. More specifically, emp_probs equals
             [node_name_to_probs, link_to_ampu_probs]
-            which is a
-            list[dict[str, np.array], dict[tuple(str, str), np.array]]
+
+            'node_name_to_probs' dict[str, np.array] is a dictionary that
+            maps each node name like 'a' to its probability 1dim numpy array
+            like P(a).
+
+            'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
+            is a dictionary that maps a link to its amputated probabilities,
+            which are 2 numpy arrays P(a|do(b)) and P(b|do( a)) for a link (
+            'a', 'b').
+
         """
         self.pdir_dot = BlankCase.get_pdir_dot(dot_file_path)
         self.links = BlankCase.get_links(dot_file_path)
@@ -190,7 +220,7 @@ class BlankCase:
         dag_index = 0
         for link_directions in product(("0->1", "1->0"), repeat=len(links)):
             dag_index += 1
-            dir_links = [] # directed links
+            dir_links = []  # directed links
             for k, link in enumerate(links):
                 # "<-" not valid in dot language
                 if link_directions[k] == "0->1":
@@ -236,7 +266,6 @@ class BlankCase:
         else:
             open_image("tempo.png").show()
 
-
     def run(self, jupyter=False, draw=False):
         """
         This method runs the whole app. It writes a lot of text and draws a
@@ -273,4 +302,4 @@ class BlankCase:
         print("\nlink to heights:")
         self.gcf_calculator.print_heights_01()
         print("\nGCF for each dag:")
-        self.gcf_calculator.print_GFCs()
+        self.gcf_calculator.print_GCFs()
