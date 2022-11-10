@@ -6,9 +6,9 @@ random.seed(13)
 
 class TruthBayesNet(BayesNet):
     """
-    This class takes as input 'bnet' which is an object of the class
-    graphs/BayesNet. It uses 'bnet' to simulate the empirical probabilities
-    emp_probs.
+    The constructor of this class takes as input 'bnet' which is an object
+    of the class BayesNet. This class uses 'bnet' to simulate the empirical
+    probabilities emp_probs.
 
     Attributes
     ----------
@@ -17,7 +17,7 @@ class TruthBayesNet(BayesNet):
         [node_name_to_probs, link_to_ampu_probs]
 
         'node_name_to_probs' dict[str, np.array] is a dictionary that
-        maps each node name like 'a' to its probability 1dim numpy array
+        maps each node name like 'a' to its probability 1-dim numpy array
         like P(a).
 
         'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
@@ -48,7 +48,7 @@ class TruthBayesNet(BayesNet):
 
     def set_emp_probs(self):
         """
-        This method sets the empirical probabilities emp_probs.
+        This method sets the empirical probabilities self.emp_probs.
 
         Returns
         -------

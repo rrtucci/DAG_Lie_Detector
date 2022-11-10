@@ -4,8 +4,8 @@ from TruthBayesNet import *
 
 class DAG:
     """
-    This is a very simple class that takes as input a "basic_dot" string.
-    Here is an example of a basic dot:
+    This is a very simple class whose constructor takes as input a
+    "basic_dot" string. Here is an example of a basic dot:
 
             dot = "digraph G {\n" \
               "a->b;\n" \
@@ -16,7 +16,7 @@ class DAG:
 
     Note that each line referring to arrows ends with a semicolon, except
     the last one, for which the semicolon is optional. Note that it contains
-    no node attributes, so all edges are directed.
+    no edge attributes, so all edges are directed.
 
     From the basic dot, this class extracts the names of the nodes of the
     DAG and puts them in a list 'self.nodes'. It also extracts the edges (
@@ -53,8 +53,10 @@ class DAG:
     @staticmethod
     def get_dag_list_dot(dag_list):
         """
-        This method creates a dot string from a list of DAG objects.
+        This method creates a dot string from a list of DAG instances.
 
+        Parameters
+        ----------
         dag_list : list[DAG]
 
         Returns
@@ -72,9 +74,12 @@ class DAG:
 
     def __str__(self):
         """
+        This method determines what happens when you do a print(object),
+        where object is an object of this class.
 
         Returns
         -------
+        None
 
         """
         s = "\nname: " + self.name

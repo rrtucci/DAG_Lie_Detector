@@ -17,6 +17,14 @@ class Case1(BlankCase):
         BlankCase.__init__(self, dot_file_path, emp_probs=emp_probs)
 
     def get_truth_bnet(self):
+        """
+        This method returns an instance of TruthBayesNet
+
+        Returns
+        -------
+        TruthBayesNet
+
+        """
         # choose any dag from dag_list and add legal structure to its dot
         dag = self.dag_list[0]
         dot_addition = ''

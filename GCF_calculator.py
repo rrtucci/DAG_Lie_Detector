@@ -4,16 +4,17 @@ import numpy as np
 
 class GCF_calculator:
     """
-    This class calculates GCF (goodness of causal fit) for a list of DAG
+    This class calculates the GCF (goodness of causal fit) for a list of DAG
     objects inputted through the variable 'dag_list'. GCF is a causal
     fitness score that is defined in the following paper
 
     https://github.com/rrtucci/goodness-c-fit/blob/master/gcf.pdf
 
-    In order to do this, the class requires as input 'emp_probs' (empirical
-    probabilities), 'links' (a list of the undirected edges (i.e., links) )
-    and a dictionary 'dag_to_link_directions' mapping each dag to the
-    directions of the links listed in 'links'.
+    The constructor of this class requires as input 'emp_probs' (empirical
+    probabilities), 'dag_list' (a list of DAG instances), 'links' (a list of
+    the undirected edges (i.e., links) ) and a dictionary
+    'dag_to_link_directions' mapping each dag to the directions of the links
+    listed in 'links'.
 
     'emp_probs' can be calculated from the data by some external program and
     handed to this one. Alternatively, it can be simulated by the class
@@ -29,7 +30,7 @@ class GCF_calculator:
         [node_name_to_probs, link_to_ampu_probs]
 
         'node_name_to_probs' dict[str, np.array] is a dictionary that
-        maps each node name like 'a' to its probability 1dim numpy array
+        maps each node name like 'a' to its probability 1-dim numpy array
         like P(a).
 
         'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
@@ -55,7 +56,7 @@ class GCF_calculator:
             [node_name_to_probs, link_to_ampu_probs]
 
             'node_name_to_probs' dict[str, np.array] is a dictionary that
-            maps each node name like 'a' to its probability 1dim numpy array
+            maps each node name like 'a' to its probability 1-dim numpy array
             like P(a).
 
             'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
@@ -82,7 +83,7 @@ class GCF_calculator:
         This method sets the parameter 'self.link_to_heights_01' which is a
         dictionary that maps each link to a list of two floats height_0,
         height_1. For a link ('a_0', 'a_1'), height_0 (resp., height_1) is
-        the height of node '0' (resp., '1')
+        the height of node 'a_0' (resp., 'a_1')
 
         Returns
         -------
@@ -142,8 +143,8 @@ class GCF_calculator:
 
     def print_heights_01(self):
         """
-        This method the two floats height_0 and height_1 ffor each element of
-        'self.links'.
+        This method prints the two floats height_0 and height_1 for each
+        element of 'self.links'.
 
         Returns
         -------
@@ -157,7 +158,8 @@ class GCF_calculator:
 
     def print_GCFs(self):
         """
-        This method the float GCF each DAG object in the list 'self.dag_list'.
+        This method prints the float GCF for each DAG object in the list
+        'self.dag_list'.
 
         Returns
         -------

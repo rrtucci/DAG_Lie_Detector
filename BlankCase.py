@@ -11,24 +11,29 @@ edge_attr = "[arrowhead=none,color=red]"
 
 class BlankCase:
     """
-    This is an abstract class. Children subclasses of this class, such as
-    Case1, Case1_2, etc. are the frontend interfaces for running this app
-    for a particular usecase. BlankCase is much longer than its subclasses
-    and does all the common heavylifting work, whereas subclasses like Case1
-    are designed to be as lean as possible, and do work that is very usecase
-    specific.
+    This is an abstract class. Subclasses of this class, such as Case1, 
+    Case1_2, etc. are the frontend interfaces for running this app for a 
+    particular usecase. BlankCase is much longer than its subclasses and 
+    does all the common heavylifting work, whereas its subclasses like Case1 
+    are designed to be as lean as possible, and only do work that is ultra 
+    usecase specific. 
 
-    The constructor of this app, and also the constructor of its subclasses,
-    requires as input 'dot_file_path' and 'emp_probs'. 'dot_file_path' is
-    the path to a dot file located in the folder 'dot_atlas'. A dot file is
-    a text file in the dot language that specifies a DAG. A dot file is used
-    as input for the graphviz rendering engine. 'emp_probs' are the
-    empirical probabilities. A value for 'emp_probs' is optional. If a value
-    for 'emp_probs' isn't provided by the user, a random one will be
-    generated/simulated by the class TruthBayesNet. This class is called
-    that because it generates a Bayesian Network (bnet) that represents "the
-    truth", and uses that bnet to simulate the empirical probabilities.
+    The constructor of this class, and also the constructor of its
+    subclasses, requires as input 'dot_file_path' and 'emp_probs'.
 
+    'dot_file_path' is the path to a dot file located in the folder
+    'dot_atlas'. A dot file is a text file in the dot language that
+    specifies a graph (i.e., network). A dot file or dot string is used as
+    input for the graphviz rendering engine.
+
+    'emp_probs' are the empirical probabilities. A value for 'emp_probs' is 
+    an optional input for the constructor of this class. If a value for 
+    'emp_probs' isn't provided by the user, a random one will be 
+    generated/simulated by the class TruthBayesNet. Class TruthBayesNet is 
+    called that because it generates a Bayesian Network (bnet) that 
+    represents "the truth", and uses that bnet to simulate the empirical 
+    probabilities. 
+ 
     Attributes
     ----------
     dag_list: list[DAG]
@@ -38,7 +43,7 @@ class BlankCase:
         [node_name_to_probs, link_to_ampu_probs]
 
         'node_name_to_probs' dict[str, np.array] is a dictionary that
-        maps each node name like 'a' to its probability 1dim numpy array
+        maps each node name like 'a' to its probability 1-dim numpy array
         like P(a).
 
         'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
@@ -64,7 +69,7 @@ class BlankCase:
             [node_name_to_probs, link_to_ampu_probs]
 
             'node_name_to_probs' dict[str, np.array] is a dictionary that
-            maps each node name like 'a' to its probability 1dim numpy array
+            maps each node name like 'a' to a probability 1-dim numpy array
             like P(a).
 
             'link_to_ampu_probs' dict[tuple[str, str], [np.array, np.array]]
@@ -183,10 +188,13 @@ class BlankCase:
         """
         def get_no_attr_dag_dot(pdir_dot, links, dir_links):
             """
-            This internal function returns a dot string with no undirected
-            edges and no edge attributes. The only edge attribute that
-            pdir_dot is expected to use is given by the global parameter
-            edge_attr = "[arrowhead=none,color=red]"
+            This internal method returns a dot string with no undirected
+            edges and no edge attributes. The output dot of this method is
+            obtained by stripping away the edge attribute edge_attr = "[
+            arrowhead=none, color=red]" from every line in pdir_do where it
+            occurs, and then replacing the formerly undirected edge by a
+            directed one that is stipulated by dir_links.
+
 
             Parameters
             ----------
@@ -268,9 +276,10 @@ class BlankCase:
 
     def run(self, jupyter=False, draw=False):
         """
-        This method runs the whole app. It writes a lot of text and draws a
-        lot of DAGs using graphviz. It documents all the stages that go into
-        calculating GCF (goodness of causal fit) for a bunch of DAGs.
+        This method runs the whole app. It writes a lot of text as standard
+        output and draws a lot of DAGs using graphviz. It documents all the
+        stages required for calculating GCF (goodness of causal fit) for a
+        bunch of DAGs.
 
         Parameters
         ----------
