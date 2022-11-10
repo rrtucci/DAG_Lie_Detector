@@ -2,7 +2,9 @@ from BlankCase import *
 
 class Case1_2_Hab(BlankCase):
     """
-    https://dreampuf.github.io/GraphvizOnline/
+    See docstring for class BlankCase. The constructor for this class should
+    use the following dot_file_path
+
     dot_atlas/case1_2_Hab.dot
 
     """
